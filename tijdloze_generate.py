@@ -12,7 +12,10 @@ import torch.optim as optim
 from torch.utils.data import TensorDataset, DataLoader
 import torch.nn.functional as F
 from transformers import AutoTokenizer, AutoModelForCausalLM, PreTrainedTokenizerFast
+
 import math
+import requests
+
 
 from transformer_class import InputEmbeddings, PositionalEncoding, MultiHeadAttention, FeedForwardSubLayer, DecoderLayer, Decoder
 
@@ -142,6 +145,21 @@ def generate_lousy_text(model, tokenizer, max_length=200, temperature=1.0, top_k
     return final_text 
 
 
+
+def download_model(url, output_path):
+    response = requests.get(url, stream=True)
+    if response.status_code == 200:
+        with open(output_path, 'wb') as f:
+            for chunk in response.iter_content(1024 * 1024):  # 1MB chunks
+                f.write(chunk)
+        print(f"Model downloaded to {output_path}")
+    else:
+        raise Exception(f"Failed to download model. Status code: {response.status_code}")
+
+url = "https://drive.google.com/file/d/1k0gKmQKZIJpSyC-M6ReTGj168ljvEUKZ"
+output_path = "model.safetensors"
+
+download_model(url, output_path)
 
 model = AutoModelForCausalLM.from_pretrained("gpt2-finetuned")
 tokenizer = AutoTokenizer.from_pretrained("gpt2-finetuned")
