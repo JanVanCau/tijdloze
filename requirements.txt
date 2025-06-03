@@ -4,4 +4,3 @@ flask
 gunicorn
 torch
 transformers
-math
