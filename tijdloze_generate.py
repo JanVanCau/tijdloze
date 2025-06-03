@@ -16,10 +16,10 @@ import math
 
 from transformer_class import InputEmbeddings, PositionalEncoding, MultiHeadAttention, FeedForwardSubLayer, DecoderLayer, Decoder
 
-fast_tokenizer = PreTrainedTokenizerFast.from_pretrained("paperface/model_7_tokenizer", local_files_only=True)
+fast_tokenizer = PreTrainedTokenizerFast.from_pretrained("model_7_tokenizer", local_files_only=True)
 
 transformer = Decoder(18000, 256, 4, 4, 512, 0.1, 512) 
-transformer.load_state_dict(torch.load("paperface/model_7_weights.pth", map_location=torch.device('cpu')))
+transformer.load_state_dict(torch.load("model_7_weights.pth", map_location=torch.device('cpu')))
 
 
 def split_positions(n, parts):
@@ -143,8 +143,8 @@ def generate_lousy_text(model, tokenizer, max_length=200, temperature=1.0, top_k
 
 
 
-model = AutoModelForCausalLM.from_pretrained("/Users/janvancauwenberghe/Desktop/DATA/eigen-projecten/tijdloze/website/paperface/gpt2-finetuned")
-tokenizer = AutoTokenizer.from_pretrained("/Users/janvancauwenberghe/Desktop/DATA/eigen-projecten/tijdloze/website/paperface/gpt2-finetuned")
+model = AutoModelForCausalLM.from_pretrained("gpt2-finetuned")
+tokenizer = AutoTokenizer.from_pretrained("gpt2-finetuned")
 
 def generate_safe_text(model, tokenizer, max_length=150, temperature=1.0, top_k=50, top_p = 0.95, start_text=None):
 
