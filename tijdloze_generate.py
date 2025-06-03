@@ -16,10 +16,10 @@ import math
 
 from transformer_class import InputEmbeddings, PositionalEncoding, MultiHeadAttention, FeedForwardSubLayer, DecoderLayer, Decoder
 
-fast_tokenizer = PreTrainedTokenizerFast.from_pretrained("/Users/janvancauwenberghe/Desktop/DATA/eigen-projecten/tijdloze/paperface/model_7_tokenizer", local_files_only=True)
+fast_tokenizer = PreTrainedTokenizerFast.from_pretrained("paperface/model_7_tokenizer", local_files_only=True)
 
 transformer = Decoder(18000, 256, 4, 4, 512, 0.1, 512) 
-transformer.load_state_dict(torch.load("/Users/janvancauwenberghe/Desktop/DATA/eigen-projecten/tijdloze/paperface/model_7_weights.pth", map_location=torch.device('cpu')))
+transformer.load_state_dict(torch.load("paperface/model_7_weights.pth", map_location=torch.device('cpu')))
 
 
 def split_positions(n, parts):
@@ -202,5 +202,3 @@ def index():
 
 if __name__ == '__main__':
     generator.run(debug=True)
-
-#python /Users/janvancauwenberghe/Desktop/DATA/eigen-projecten/tijdloze/website/tijdloze_generate.py
