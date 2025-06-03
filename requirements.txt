@@ -3,8 +3,5 @@ pandas
 flask
 gunicorn
 torch
-random 
-re
-os
 transformers
 math
