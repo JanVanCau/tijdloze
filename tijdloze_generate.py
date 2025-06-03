@@ -161,8 +161,8 @@ output_path = "model.safetensors"
 
 download_model(url, output_path)
 
-model = AutoModelForCausalLM.from_pretrained("gpt2-finetuned")
-tokenizer = AutoTokenizer.from_pretrained("gpt2-finetuned")
+model = AutoModelForCausalLM.from_pretrained("gpt2-finetuned", local_files_only=True)
+tokenizer = AutoTokenizer.from_pretrained("gpt2-finetuned", local_files_only=True)
 
 def generate_safe_text(model, tokenizer, max_length=150, temperature=1.0, top_k=50, top_p = 0.95, start_text=None):
 
