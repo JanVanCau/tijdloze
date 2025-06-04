@@ -146,24 +146,24 @@ def generate_lousy_text(model, tokenizer, max_length=200, temperature=1.0, top_k
 
 
 
-def download_model(url, output_path):
-    response = requests.get(url, stream=True)
-    if response.status_code == 200:
-        with open(output_path, 'wb') as f:
-            for chunk in response.iter_content(1024 * 1024):  # 1MB chunks
-                f.write(chunk)
-        print(f"Model downloaded to {output_path}")
-    else:
-        raise Exception(f"Failed to download model. Status code: {response.status_code}")
+#def download_model(url, output_path):
+    #response = requests.get(url, stream=True)
+    #if response.status_code == 200:
+        #with open(output_path, 'wb') as f:
+            #for chunk in response.iter_content(1024 * 1024):  # 1MB chunks
+                #f.write(chunk)
+        #print(f"Model downloaded to {output_path}")
+    #else:
+        #raise Exception(f"Failed to download model. Status code: {response.status_code}")
 
 #url = "https://drive.google.com/uc?id=1k0gKmQKZIJpSyC-M6ReTGj168ljvEUKZ"
 #output_path = "gpt2-finetuned/model.safetensors"
 #download_model(url, output_path)
 
-gdown.download(id="1k0gKmQKZIJpSyC-M6ReTGj168ljvEUKZ", output="gpt2-finetuned/model.safetensors", quiet=False)
+#gdown.download(id="1k0gKmQKZIJpSyC-M6ReTGj168ljvEUKZ", output="gpt2-finetuned/model.safetensors", quiet=False)
 
-model = AutoModelForCausalLM.from_pretrained("gpt2-finetuned", local_files_only=True)
-tokenizer = AutoTokenizer.from_pretrained("gpt2-finetuned", local_files_only=True)
+model = AutoModelForCausalLM.from_pretrained("JanVanCau/gpt2-finetuned", local_files_only=True)
+tokenizer = AutoTokenizer.from_pretrained("JanVanCau/gpt2-finetuned", local_files_only=True)
 
 def generate_safe_text(model, tokenizer, max_length=150, temperature=1.0, top_k=50, top_p = 0.95, start_text=None):
 
