@@ -162,8 +162,8 @@ def generate_lousy_text(model, tokenizer, max_length=200, temperature=1.0, top_k
 
 #gdown.download(id="1k0gKmQKZIJpSyC-M6ReTGj168ljvEUKZ", output="gpt2-finetuned/model.safetensors", quiet=False)
 
-model = AutoModelForCausalLM.from_pretrained("JanVanCau/gpt2-finetuned", local_files_only=True)
-tokenizer = AutoTokenizer.from_pretrained("JanVanCau/gpt2-finetuned", local_files_only=True)
+model = AutoModelForCausalLM.from_pretrained("JanVanCau/gpt2-finetuned")
+tokenizer = AutoTokenizer.from_pretrained("JanVanCau/gpt2-finetuned")
 
 def generate_safe_text(model, tokenizer, max_length=150, temperature=1.0, top_k=50, top_p = 0.95, start_text=None):
 
