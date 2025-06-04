@@ -157,7 +157,7 @@ def download_model(url, output_path):
         raise Exception(f"Failed to download model. Status code: {response.status_code}")
 
 url = "https://drive.google.com/uc?id=1k0gKmQKZIJpSyC-M6ReTGj168ljvEUKZ"
-output_path = "model.safetensors"
+output_path = "gpt2-finetuned/model.safetensors"
 
 download_model(url, output_path)
 
