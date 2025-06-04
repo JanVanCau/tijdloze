@@ -15,7 +15,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, PreTrainedTokenize
 
 import math
 import requests
-
+import gdown
 
 from transformer_class import InputEmbeddings, PositionalEncoding, MultiHeadAttention, FeedForwardSubLayer, DecoderLayer, Decoder
 
@@ -156,10 +156,11 @@ def download_model(url, output_path):
     else:
         raise Exception(f"Failed to download model. Status code: {response.status_code}")
 
-url = "https://drive.google.com/uc?id=1k0gKmQKZIJpSyC-M6ReTGj168ljvEUKZ"
-output_path = "gpt2-finetuned/model.safetensors"
+#url = "https://drive.google.com/uc?id=1k0gKmQKZIJpSyC-M6ReTGj168ljvEUKZ"
+#output_path = "gpt2-finetuned/model.safetensors"
+#download_model(url, output_path)
 
-download_model(url, output_path)
+gdown.download(id="1k0gKmQKZIJpSyC-M6ReTGj168ljvEUKZ", output="gpt2-finetuned/model.safetensors", quiet=False)
 
 model = AutoModelForCausalLM.from_pretrained("gpt2-finetuned", local_files_only=True)
 tokenizer = AutoTokenizer.from_pretrained("gpt2-finetuned", local_files_only=True)
