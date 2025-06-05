@@ -82,114 +82,95 @@ def paragraph(text, max_lines=6):
     return p_text
 
 
-def generate_lousy_text(model, tokenizer, max_length=200, temperature=1.0, top_k=50, start_text=None):
+#def generate_lousy_text(model, tokenizer, max_length=200, temperature=1.0, top_k=50, start_text=None):
     
-    model.eval()
+    #model.eval()
 
-    if start_text:
-        input_ids = tokenizer.encode(start_text)
-    else:
-        input_ids = [tokenizer.convert_tokens_to_ids("\n")]
+    #if start_text:
+        #input_ids = tokenizer.encode(start_text)
+    #else:
+        #input_ids = [tokenizer.convert_tokens_to_ids("\n")]
 
-    input_tensor = torch.tensor(input_ids, dtype=torch.long).unsqueeze(0)  # [1, seq_len]
-    generated = input_ids.copy()
+    #input_tensor = torch.tensor(input_ids, dtype=torch.long).unsqueeze(0)  # [1, seq_len]
+    #generated = input_ids.copy()
 
-    for _ in range(max_length):
+    #for _ in range(max_length):
         
-        seq_length = input_tensor.size(1)
-        mask = (1-torch.triu(torch.ones(1, seq_length, seq_length), diagonal=1))
+        #seq_length = input_tensor.size(1)
+        #mask = (1-torch.triu(torch.ones(1, seq_length, seq_length), diagonal=1))
         
-        with torch.no_grad():
-            outputs = model(input_tensor, mask)
-            next_token_logits = outputs[0, -1, :]  # take the last time step's logits
+        #with torch.no_grad():
+            #outputs = model(input_tensor, mask)
+            #next_token_logits = outputs[0, -1, :]  # take the last time step's logits
 
-        for n in [1, 2, 3]:  # block 1-grams, 2-grams, 3-grams
-            if len(generated) >= n:
-                ngram_prefix = tuple(generated[-(n-1):]) if n > 1 else ()
-                banned_tokens = set()
+        #for n in [1, 2, 3]:  # block 1-grams, 2-grams, 3-grams
+            #if len(generated) >= n:
+                #ngram_prefix = tuple(generated[-(n-1):]) if n > 1 else ()
+                #banned_tokens = set()
 
-            if n == 1:
-                banned_tokens.add(generated[-1])
-            else:
-                for i in range(len(generated) - n + 1):
-                    if tuple(generated[i:i + n - 1]) == ngram_prefix:
-                        banned_tokens.add(generated[i + n - 1])
+            #if n == 1:
+                #banned_tokens.add(generated[-1])
+            #else:
+                #for i in range(len(generated) - n + 1):
+                    #if tuple(generated[i:i + n - 1]) == ngram_prefix:
+                        #banned_tokens.add(generated[i + n - 1])
 
-            next_token_logits[list(banned_tokens)] = float('-inf')   # Set banned token logits to -inf
+            #next_token_logits[list(banned_tokens)] = float('-inf')   # Set banned token logits to -inf
             
 
-        logits = next_token_logits / temperature
+        #logits = next_token_logits / temperature
 
-        unk_token_id = tokenizer.convert_tokens_to_ids("[UNK]")
-        logits[unk_token_id] = float('-inf')  # Block [UNK] from being sampled
+        #unk_token_id = tokenizer.convert_tokens_to_ids("[UNK]")
+        #logits[unk_token_id] = float('-inf')  # Block [UNK] from being sampled
 
-        if top_k > 0:
-            topk_vals, topk_indices = torch.topk(logits, top_k)
-            probs = F.softmax(topk_vals, dim=-1)
-            next_token = topk_indices[torch.multinomial(probs, 1)].item()
-        else:
-            probs = F.softmax(logits, dim=-1)
-            next_token = torch.multinomial(probs, 1).item()
+        #if top_k > 0:
+            #topk_vals, topk_indices = torch.topk(logits, top_k)
+            #probs = F.softmax(topk_vals, dim=-1)
+            #next_token = topk_indices[torch.multinomial(probs, 1)].item()
+        #else:
+            #probs = F.softmax(logits, dim=-1)
+            #next_token = torch.multinomial(probs, 1).item()
 
-        generated.append(next_token)
-        input_tensor = torch.tensor(generated, dtype=torch.long).unsqueeze(0)
+        #generated.append(next_token)
+        #input_tensor = torch.tensor(generated, dtype=torch.long).unsqueeze(0)
 
-    text = tokenizer.decode(generated)
-    cleaned_text = re.sub(r'\r\n?|\(|\)', '\n', text)
-    cleaned_text = re.sub(r'\n\s*', '\n', cleaned_text)
-    cleaned_text = re.sub(r'\n{2,}', '\n', cleaned_text)
+    #text = tokenizer.decode(generated)
+    #cleaned_text = re.sub(r'\r\n?|\(|\)', '\n', text)
+    #cleaned_text = re.sub(r'\n\s*', '\n', cleaned_text)
+    #cleaned_text = re.sub(r'\n{2,}', '\n', cleaned_text)
 
-    final_text = break_lines_and_capitalize(cleaned_text, max_words=12)
-    final_text = paragraph(final_text, max_lines=6)
+    #final_text = break_lines_and_capitalize(cleaned_text, max_words=12)
+    #final_text = paragraph(final_text, max_lines=6)
         
-    return final_text 
+    #return final_text 
 
 
 
-#def download_model(url, output_path):
-    #response = requests.get(url, stream=True)
-    #if response.status_code == 200:
-        #with open(output_path, 'wb') as f:
-            #for chunk in response.iter_content(1024 * 1024):  # 1MB chunks
-                #f.write(chunk)
-        #print(f"Model downloaded to {output_path}")
-    #else:
-        #raise Exception(f"Failed to download model. Status code: {response.status_code}")
+#model = AutoModelForCausalLM.from_pretrained("JanVanCau/distilgpt2-finetuned")
+#tokenizer = AutoTokenizer.from_pretrained("JanVanCau/distilgpt2-finetuned")
 
-#url = "https://drive.google.com/uc?id=1k0gKmQKZIJpSyC-M6ReTGj168ljvEUKZ"
-#output_path = "gpt2-finetuned/model.safetensors"
-#download_model(url, output_path)
+def generate_safe_text(prompt, max_length=150, temperature=1.0, top_k=50, top_p=0.95):
+    headers = {"Authorization": f"Bearer {HF_API_TOKEN}"}
 
-#gdown.download(id="1k0gKmQKZIJpSyC-M6ReTGj168ljvEUKZ", output="gpt2-finetuned/model.safetensors", quiet=False)
+    prompt = prompt or tokenizer.eos_token
 
-model = AutoModelForCausalLM.from_pretrained("JanVanCau/distilgpt2-finetuned")
-tokenizer = AutoTokenizer.from_pretrained("JanVanCau/distilgpt2-finetuned")
+    data = {"inputs": prompt, "parameters": {"max_new_tokens": max_length, "temperature": temperature, "top_k": top_k, "top_p": top_p, "do_sample": True, "repetition_penalty": 1.2}}
 
-def generate_safe_text(model, tokenizer, max_length=150, temperature=1.0, top_k=50, top_p = 0.95, start_text=None):
+    response = requests.post("https://api-inference.huggingface.co/models/JanVanCau/distilgpt2-finetuned", headers=headers, json=data
+    )
 
-    if start_text:
-        encoding = tokenizer(start_text, return_tensors="pt")
-    else:
-        encoding = tokenizer(tokenizer.eos_token, return_tensors="pt")
-        
-    output_ids = model.generate(
-        input_ids = encoding["input_ids"],
-        attention_mask = encoding["attention_mask"],
-        max_length = max_length,
-        temperature = temperature,
-        top_k = top_k,
-        top_p = top_p,
-        do_sample = True,
-        repetition_penalty = 1.2,
-        pad_token_id = tokenizer.eos_token_id)
+    if response.status_code != 200:
+        return f"Error: {response.text}"
 
-    text = tokenizer.decode(output_ids[0], skip_special_tokens=True)
+    text = response.json()[0]['generated_text']
+
+    # 🧹 Custom post-processing
     cleaned_text = re.sub(r'(?<![ \n])([A-Z])', r'\n\1', text)
-
     final_text = break_lines_and_capitalize(cleaned_text, max_words=12)
     final_text = paragraph(final_text, max_lines=6)
-    
+
     return final_text
+
 
 
 generator = Flask(__name__)
