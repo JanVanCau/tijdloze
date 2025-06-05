@@ -162,34 +162,34 @@ def generate_lousy_text(model, tokenizer, max_length=200, temperature=1.0, top_k
 
 #gdown.download(id="1k0gKmQKZIJpSyC-M6ReTGj168ljvEUKZ", output="gpt2-finetuned/model.safetensors", quiet=False)
 
-model = AutoModelForCausalLM.from_pretrained("JanVanCau/distilgpt2-finetuned")
-tokenizer = AutoTokenizer.from_pretrained("JanVanCau/distilgpt2-finetuned")
+#model = AutoModelForCausalLM.from_pretrained("JanVanCau/distilgpt2-finetuned")
+#tokenizer = AutoTokenizer.from_pretrained("JanVanCau/distilgpt2-finetuned")
 
-def generate_safe_text(model, tokenizer, max_length=150, temperature=1.0, top_k=50, top_p = 0.95, start_text=None):
+#def generate_safe_text(model, tokenizer, max_length=150, temperature=1.0, top_k=50, top_p = 0.95, start_text=None):
 
-    if start_text:
-        encoding = tokenizer(start_text, return_tensors="pt")
-    else:
-        encoding = tokenizer(tokenizer.eos_token, return_tensors="pt")
+    #if start_text:
+        #encoding = tokenizer(start_text, return_tensors="pt")
+    #else:
+        #encoding = tokenizer(tokenizer.eos_token, return_tensors="pt")
         
-    output_ids = model.generate(
-        input_ids = encoding["input_ids"],
-        attention_mask = encoding["attention_mask"],
-        max_length = max_length,
-        temperature = temperature,
-        top_k = top_k,
-        top_p = top_p,
-        do_sample = True,
-        repetition_penalty = 1.2,
-        pad_token_id = tokenizer.eos_token_id)
+    #output_ids = model.generate(
+        #input_ids = encoding["input_ids"],
+        #attention_mask = encoding["attention_mask"],
+        #max_length = max_length,
+        #temperature = temperature,
+        #top_k = top_k,
+        #top_p = top_p,
+        #do_sample = True,
+        #repetition_penalty = 1.2,
+        #pad_token_id = tokenizer.eos_token_id)
 
-    text = tokenizer.decode(output_ids[0], skip_special_tokens=True)
-    cleaned_text = re.sub(r'(?<![ \n])([A-Z])', r'\n\1', text)
+    #text = tokenizer.decode(output_ids[0], skip_special_tokens=True)
+    #cleaned_text = re.sub(r'(?<![ \n])([A-Z])', r'\n\1', text)
 
-    final_text = break_lines_and_capitalize(cleaned_text, max_words=12)
-    final_text = paragraph(final_text, max_lines=6)
+    #final_text = break_lines_and_capitalize(cleaned_text, max_words=12)
+    #final_text = paragraph(final_text, max_lines=6)
     
-    return final_text
+    #return final_text
 
 
 generator = Flask(__name__)
@@ -211,11 +211,11 @@ def index():
             except Exception as e:
                 result = f"Error generating text: {str(e)}"
         
-        elif action == 'safe_model':
-            try:
-                result = generate_safe_text(model, tokenizer, max_length=150, temperature=1.0, top_k=50, top_p = 0.95, start_text=input_text)
-            except Exception as e:
-                result = f"Error generating text: {str(e)}"
+        #elif action == 'safe_model':
+            #try:
+                #result = generate_safe_text(model, tokenizer, max_length=150, temperature=1.0, top_k=50, top_p = 0.95, start_text=input_text)
+            #except Exception as e:
+                #result = f"Error generating text: {str(e)}"
 
     return render_template('index.html', gen_text=result, prov_text=input_text)
 
