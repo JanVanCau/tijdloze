@@ -149,6 +149,8 @@ def paragraph(text, max_lines=6):
 #model = AutoModelForCausalLM.from_pretrained("JanVanCau/distilgpt2-finetuned")
 #tokenizer = AutoTokenizer.from_pretrained("JanVanCau/distilgpt2-finetuned")
 
+HF_API_TOKEN = os.environ.get("HUGGINGFACE_HUB_TOKEN")
+
 def generate_safe_text(prompt, max_length=150, temperature=1.0, top_k=50, top_p=0.95):
     headers = {"Authorization": f"Bearer {HF_API_TOKEN}"}
 
